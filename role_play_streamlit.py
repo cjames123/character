@@ -74,7 +74,7 @@ meta_labels = {
 
 
 with st.container():
-    st.text_area(label="文本，用来提取角色的名字和人设)", key="novel", max_chars=1000)
+    st.text_area(label="小说，用来提取角色的名字和人设)", key="novel", max_chars=1000)
 
 
 def update_meta():
@@ -135,9 +135,9 @@ def verify_meta() -> bool:
 
 
 def verify_novel() -> bool:
-    # 检查`角色名`和`角色人设`是否空，若为空，则弹出提醒
+    # 检查`小说`是否空，若为空，则弹出提醒
     if st.session_state["novel"] == "":
-        st.error("文本不能为空")
+        st.error("小说不能为空")
         return False
     return True
 
