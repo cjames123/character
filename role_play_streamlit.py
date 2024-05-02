@@ -319,3 +319,43 @@ for msg in st.session_state["history"]:
             st.markdown(msg["content"])
     else:
         st.error("无效的角色")
+
+
+with st.chat_message(name="user", avatar="user"):
+    input_placeholder = st.empty()
+with st.chat_message(name="assistant", avatar="assistant"):
+    message_placeholder = st.empty()
+
+
+def output_stream_response(response_stream: Iterator[str], placeholder):
+    content = ""
+    for content in itertools.accumulate(response_stream):
+        placeholder.markdown(content)
+    return content
+
+
+def start_chat():
+    query = st.chat_input("开始对话吧")
+    if not query:
+        return
+    else:
+        if not verify_meta():
+            return
+        if not api.API_KEY:
+            st.error("未设置API_KEY")
+
+        input_placeholder.markdown(query)
+        st.session_state["history"].append(TextMsg(role="user", content=query))
+
+        response_stream = get_characterglm_response(messages=st.session_state["history"],
+                                                    meta=st.session_state["meta"])
+        response = output_stream_response(response_stream, message_placeholder)
+        if not response:
+            message_placeholder.markdown("生成出错")
+            st.session_state["history"].pop()
+        else:
+            st.session_state["history"].append(TextMsg(role="assistant", content=response))
+
+
+if __name__ == '__main__':
+    start_chat()
