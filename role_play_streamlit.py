@@ -74,7 +74,7 @@ meta_labels = {
 
 
 with st.container():
-    st.text_area(label="小说，用来提取角色的名字和人设)", key="novel", max_chars=1000)
+    st.text_area(label="小说，用来提取角色的名字和人设)", key="novel", max_chars=2000)
 
 
 def update_meta():
